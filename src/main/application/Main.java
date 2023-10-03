@@ -1,19 +1,18 @@
-package main.application;
+package application;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
-import java.sql.Time;
 import java.util.ConcurrentModificationException;
 
-import main.engine.Bot;
-import main.engine.Food;
-import main.engine.GameScene;
-import main.engine.PaintScene;
-import main.engine.Player;
-import main.engine.Vector2;
-import main.engine.input.Input;
-import main.engine.util.Mathf;
+import engine.game.Bot;
+import engine.game.Food;
+import engine.game.Player;
+import engine.geometric.Vector2;
+import engine.input.Input;
+import engine.scene.GameScene;
+import engine.util.Mathf;
+import engine.util.Time;
 
 public class Main {
     public final static Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
@@ -44,15 +43,16 @@ public class Main {
 
     public void init(){
         Player player = new Player(new Vector2(WIDTH / 2, HEIGHT / 2), Color.RED);
-        //Bot bot = new Bot(new Vector2(WIDTH / 2, HEIGHT / 2), Color.BLUE);
+        Bot bot = new Bot(new Vector2(WIDTH / 2, HEIGHT / 2), Color.BLUE);
 
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 50; i++) {
             Vector2 p = new Vector2(Mathf.random(WIDTH), Mathf.random(HEIGHT));
             gameScene.add(new Food(p));
         }
 
+        launcher.getPaintScene().setTarget(player);
         gameScene.add(player);
-        //gameScene.add(bot);
+        gameScene.add(bot);
     }
 
     public void thread(){
@@ -60,6 +60,7 @@ public class Main {
             public void run(){
                 while(isAlive() && !isInterrupted()){
                     try{
+                        Time.update();
                         Input.update();
                         launcher.repaint();
                         gameScene.update();

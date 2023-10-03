@@ -1,4 +1,4 @@
-package main.engine.input;
+package engine.input;
 
 import java.util.ArrayList;
 import java.util.List;

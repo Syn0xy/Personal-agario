@@ -1,4 +1,4 @@
-package main.engine.input;
+package engine.input;
 
 public class InvalidKeyCodeExpection extends Exception{
     public InvalidKeyCodeExpection(){}

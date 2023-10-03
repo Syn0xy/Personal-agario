@@ -1,6 +1,6 @@
-package main.engine.util;
+package engine.util;
 
-import main.engine.Vector2;
+import engine.geometric.Vector2;
 
 public class Mathf {
     public static double random(){

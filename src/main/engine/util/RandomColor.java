@@ -1,4 +1,4 @@
-package main.engine.util;
+package engine.util;
 
 import java.awt.Color;
 

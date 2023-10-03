@@ -1,16 +1,19 @@
-package main.engine;
+package engine.scene;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import engine.game.Sphere;
+
 public class GameScene {
-    private LinkedList<Sphere> spheres;
+    private List<Sphere> spheres;
     
     private int width;
     private int height;
 
     public GameScene(int width, int height){
-        this.spheres = new LinkedList<>();
+        this.spheres = new ArrayList<>();
         this.width = width;
         this.height = height;
         Sphere.gameScene = this;
@@ -21,7 +24,7 @@ public class GameScene {
     public int getHeight(){ return height; }
 
     public void add(Sphere sphere){
-        spheres.addFirst(sphere);
+        spheres.add(sphere);
     }
 
     public void delete(Sphere sphere){

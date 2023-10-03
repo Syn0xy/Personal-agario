@@ -1,17 +1,19 @@
-package main.engine;
+package engine.game;
 
 import java.awt.Color;
 
-import main.application.Main;
-import main.engine.input.Input;
-import main.engine.input.KeyCode;
-import main.engine.util.Mathf;
+import application.Main;
+import engine.geometric.Vector2;
+import engine.input.Input;
+import engine.input.KeyCode;
+import engine.util.Mathf;
+import engine.util.Time;
 
 public class Player extends Sphere{
-    public final static double RADIUS = 20;
+    public final static double SIZE = 10;
 
     public Player(Vector2 position, Color color){
-        super(position, RADIUS, color);
+        super(position, SIZE, color);
     }
 
     public SphereType getType(){
@@ -19,10 +21,12 @@ public class Player extends Sphere{
     }
 
     public void move(){
-        if(Input.getKey(KeyCode.RIGHT_ARROW)) position.plusX(0.002);
-        if(Input.getKey(KeyCode.LEFT_ARROW)) position.plusX(-0.002);
-        if(Input.getKey(KeyCode.UP_ARROW)) position.plusY(0.002);
-        if(Input.getKey(KeyCode.DOWN_ARROW)) position.plusY(-0.002);
+        double dt = Time.getDeltaTime();
+        double move = 30 * dt;
+        if(Input.getKey(KeyCode.RIGHT_ARROW)) position.plusX(move);
+        if(Input.getKey(KeyCode.LEFT_ARROW)) position.plusX(-move);
+        if(Input.getKey(KeyCode.UP_ARROW)) position.plusY(move);
+        if(Input.getKey(KeyCode.DOWN_ARROW)) position.plusY(-move);
         bounce();
     }
 
@@ -31,9 +35,5 @@ public class Player extends Sphere{
         if(position.getX() > Main.WIDTH) position.plusX(- Mathf.distance(position.getX(), Main.WIDTH));
         if(position.getY() < 0) position.plusY(Mathf.distance(position.getY(), 0));
         if(position.getY() > Main.HEIGHT) position.plusY(- Mathf.distance(position.getY(), Main.HEIGHT));
-    }
-
-    public String toString(){
-        return super.toString();
     }
 }

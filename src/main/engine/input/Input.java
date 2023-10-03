@@ -1,4 +1,4 @@
-package main.engine.input;
+package engine.input;
 
 import java.awt.MouseInfo;
 import java.awt.Point;

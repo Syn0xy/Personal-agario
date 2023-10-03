@@ -1,34 +1,37 @@
-package main.engine;
+package engine.game;
 
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.engine.util.Mathf;
+import engine.geometric.Vector2;
+import engine.scene.GameScene;
+import engine.util.Mathf;
 
 public abstract class Sphere {
     public final static List<Sphere> SPHERES = new ArrayList<>();
+    public final static double RANGE = 2;
     public static GameScene gameScene;
 
     protected Vector2 position;
-    protected double radius;
+    protected double size;
     protected Color color;
 
-    public Sphere(Vector2 position, double radius, Color color){
+    public Sphere(Vector2 position, double size, Color color){
         this.position = position;
-        this.radius = radius;
+        this.size = size;
         this.color = color;
         SPHERES.add(this);
     }
 
     public Vector2 getPosition(){ return position; }
-    public double getRadius(){ return radius; }
+    public double getSize(){ return size; }
     public Color getColor(){ return color; }
 
     public abstract SphereType getType();
 
     public void eat(Sphere s){
-        radius += s.getRadius();
+        size += s.getSize();
         s.delete();
     }
 
@@ -56,10 +59,10 @@ public abstract class Sphere {
     }
 
     public boolean collision(Sphere s){
-        return distance(s) < (radius + s.getRadius());
+        return distance(s) < (size + s.getSize()) * 2 + RANGE;
     }
-
+    
     public String toString(){
-        return getClass().getSimpleName() + "[position:" + position + ", radius:" + radius + ", color:" + color + "]";
+        return getClass().getSimpleName() + "[position:" + position + ", size:" + size + ", color:" + color + "]";
     }
 }

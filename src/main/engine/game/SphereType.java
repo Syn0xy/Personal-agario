@@ -1,4 +1,4 @@
-package main.engine;
+package engine.game;
 
 public enum SphereType {
     FOOD,

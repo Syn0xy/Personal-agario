@@ -1,4 +1,4 @@
-package main.application;
+package application;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,9 +7,9 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import main.engine.GameScene;
-import main.engine.PaintScene;
-import main.engine.input.Input;
+import engine.graphic.PaintScene;
+import engine.input.Input;
+import engine.scene.GameScene;
 
 public class Launcher extends JPanel{
     public final static String TITLE = "Personal Agario";
