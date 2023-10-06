@@ -2,7 +2,6 @@ package engine.game;
 
 import java.awt.Color;
 
-import application.Main;
 import engine.geometric.Vector2;
 import engine.input.Input;
 import engine.input.KeyCode;
@@ -32,8 +31,8 @@ public class Player extends Sphere{
 
     public void bounce(){
         if(position.getX() < 0) position.plusX(Mathf.distance(position.getX(), 0));
-        if(position.getX() > Main.WIDTH) position.plusX(- Mathf.distance(position.getX(), Main.WIDTH));
+        if(position.getX() > gameScene.getWidth()) position.plusX(- Mathf.distance(position.getX(), gameScene.getWidth()));
         if(position.getY() < 0) position.plusY(Mathf.distance(position.getY(), 0));
-        if(position.getY() > Main.HEIGHT) position.plusY(- Mathf.distance(position.getY(), Main.HEIGHT));
+        if(position.getY() > gameScene.getHeight()) position.plusY(- Mathf.distance(position.getY(), gameScene.getHeight()));
     }
 }

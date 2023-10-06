@@ -6,11 +6,10 @@ import java.util.List;
 
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
-import engine.util.Mathf;
 
 public abstract class Sphere {
     public final static List<Sphere> SPHERES = new ArrayList<>();
-    public final static double RANGE = 2;
+    public final static double RANGE = 0;
     public static GameScene gameScene;
 
     protected Vector2 position;
@@ -31,7 +30,7 @@ public abstract class Sphere {
     public abstract SphereType getType();
 
     public void eat(Sphere s){
-        size += s.getSize();
+        size += s.getSize() / 2;
         s.delete();
     }
 
@@ -44,7 +43,7 @@ public abstract class Sphere {
     public final void update(){
         if(getType() != SphereType.FOOD){
             move();
-            collision();
+            // collision();
         }
     }
 
@@ -55,11 +54,11 @@ public abstract class Sphere {
     }
 
     public double distance(Sphere s){
-        return Mathf.distance(position, s.getPosition());
+        return position.distance(s.getPosition());
     }
 
     public boolean collision(Sphere s){
-        return distance(s) < (size + s.getSize()) * 2 + RANGE;
+        return distance(s) < (size + s.getSize()) + RANGE;
     }
     
     public String toString(){

@@ -1,7 +1,6 @@
 package engine.scene;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import engine.game.Sphere;
@@ -25,6 +24,10 @@ public class GameScene {
 
     public void add(Sphere sphere){
         spheres.add(sphere);
+    }
+
+    public void addAll(Sphere... spheres){
+        for(Sphere s : spheres){ add(s); }
     }
 
     public void delete(Sphere sphere){

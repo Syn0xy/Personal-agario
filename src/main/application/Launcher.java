@@ -14,7 +14,7 @@ import engine.scene.GameScene;
 public class Launcher extends JPanel{
     public final static String TITLE = "Personal Agario";
     public final static Color BACKGROUND = Color.GRAY;
-    public final static Color BACKGROUND_TERRAIN = Color.WHITE;
+    public final static Color BACKGROUND_TERRAIN = Color.BLACK;
 
     public final static Dimension SCREEN_SIZE = Main.SCREEN_SIZE;
     public final static int SCREEN_WIDTH = Main.SCREEN_WIDTH;

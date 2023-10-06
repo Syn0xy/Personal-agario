@@ -2,11 +2,9 @@ package engine.graphic;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.ArrayList;
 import java.util.List;
 
 import application.Launcher;
-import application.Main;
 import engine.game.Sphere;
 import engine.game.SphereType;
 import engine.geometric.Vector2;
@@ -25,8 +23,6 @@ public class PaintScene {
 
     private int halfWindowWidth;
     private int halfWindowHeight;
-    private int startWidth;
-    private int startHeight;
     private int width;
     private int height;
 
@@ -51,8 +47,6 @@ public class PaintScene {
         height = gameScene.getHeight();
         halfWindowWidth = windowWidth / 2;
         halfWindowHeight = windowHeight / 2;
-        startWidth = halfWindowWidth - width / 2;
-        startHeight = halfWindowHeight - height / 2;
     }
 
     public void setGraphics(Graphics graphics){
@@ -62,67 +56,49 @@ public class PaintScene {
     public void drawScene(){
         if(graphics == null) return;
         clearScreen();
-        if(target != null){
-            drawTarget();
-            drawTerrainWithTarget();
-            drawFoodWithTarget();
-        }else{
-            drawTerrain();
-            drawSpheres();
-        }
+        drawTerrain();
+        drawSpheres();
     }
 
     public void clearScreen(){
-        graphics.setColor(BACKGROUND);
-        graphics.fillRect(0, 0, windowWidth, windowHeight);
-    }
-
-    public void drawTarget(){
-        Vector2 middle = new Vector2(windowWidth / 2, windowHeight / 2);
-        drawSphere(target.getColor(), middle, windowWidth * 0.05);
-    }
-
-    public void drawFoodWithTarget(){
-        Vector2 pt = target.getPosition();
-        double prop = (windowWidth * 0.05) / target.getSize();
-        for(Sphere s : SPHERES){
-            if(s.getType() != SphereType.FOOD) continue;
-            Vector2 p = s.getPosition().copy();
-            p.minus(pt);
-            double size = s.getSize() * prop;
-            drawSphere(s.getColor(), p, size);
-        }
-    }
-
-    public void drawTerrainWithTarget(){
-        // drawTerrainWithTarget(target.getPosition(), BACKGROUND_TERRAIN, );
-    }
-
-    public void drawTerrainWithTarget(Vector2 position, Color color, double proportion){
-
+        setColor(BACKGROUND);
+        fillRect(windowWidth, windowHeight);
     }
 
     public void drawTerrain(){
-        graphics.setColor(BACKGROUND_TERRAIN);
-        graphics.fillRect(startWidth, startHeight, width, height);
+        setColor(BACKGROUND_TERRAIN);
+        fillRect(width, height);
     }
-
     public void drawSpheres(){
         for(Sphere s : gameScene.getSpheres()) drawSphere(s);
     }
 
     public void drawSphere(Sphere s){
-        drawSphere(s.getColor(), s.getPosition(), s.getSize());
+        setColor(s.getColor());
+        drawSphere(s.getPosition(), s.getSize());
     }
 
-    public void drawSphere(Color color, Vector2 p, double r){
-        drawSphere(color, (int)p.getX(), (int)p.getY(), (int)r);
+    public void drawSphere(Vector2 p, double r){
+        fillOval((int)p.getX(), (int)p.getY(), (int)r);
     }
 
-    public void drawSphere(Color color, int x, int y, int r){
+    ////////// Graphics
+
+    public void setColor(Color color){
+        graphics.setColor(color);
+    }
+
+    public void fillRect(int width, int height){
+        fillRect(0, 0, width, height);
+    }
+
+    public void fillRect(int x, int y, int width, int height){
+        graphics.fillRect(x, windowHeight - height, width, height);
+    }
+    
+    public void fillOval(int x, int y, int r){
         int d = r * 2;
         y = windowHeight - y;
-        graphics.setColor(color);
         graphics.fillOval(x - r, y - r, d, d);
     }
 }
