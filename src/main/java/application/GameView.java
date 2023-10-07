@@ -9,8 +9,6 @@ import engine.game.Player;
 import engine.geometric.Vector2;
 import engine.input.Input;
 import engine.scene.GameScene;
-import engine.util.Mathf;
-import engine.util.RandomColor;
 import engine.util.Time;
 
 public class GameView {
@@ -32,16 +30,17 @@ public class GameView {
     }
 
     public void init(){
-        // Player player = new Player(new Vector2(width / 2, height / 2), Color.RED);
-        for(int i = 0; i < 10; i++){
-            Bot b = new Bot(Vector2.random(0, width));
+        Player player = new Player(new Vector2(width / 2, height / 2), Color.RED);
+        for(int i = 0; i < 750; i++){
+            Bot b = new Bot(Vector2.randomRange(width, height));
             gameScene.add(b);
         }
 
-        for (int i = 0; i < 50; i++) {
-            Food f = new Food(Vector2.random(0, width));
+        for (int i = 0; i < 100; i++) {
+            Food f = new Food(Vector2.randomRange(width, height));
             gameScene.add(f);
         }
+        gameScene.add(player);
     }
 
     public void thread(){

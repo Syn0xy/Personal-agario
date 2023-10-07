@@ -1,6 +1,6 @@
 package engine.game;
 
-public enum SphereType {
+public enum CellType {
     FOOD,
     PLAYER,
     BOT

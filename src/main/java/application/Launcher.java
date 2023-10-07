@@ -41,7 +41,7 @@ public class Launcher extends JPanel{
     public PaintScene getPaintScene(){ return paintScene; }
 
     public void start(){
-        JFrame.setDefaultLookAndFeelDecorated(true);
+        JFrame.setDefaultLookAndFeelDecorated(false);
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setBackground(BACKGROUND);

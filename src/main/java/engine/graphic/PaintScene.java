@@ -2,31 +2,29 @@ package engine.graphic;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.util.List;
+import java.util.Collections;
 
-import application.Launcher;
-import engine.game.Sphere;
-import engine.game.SphereType;
+import engine.game.Cell;
+import engine.game.DistanceCellComparator;
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
 
+import static application.Launcher.BACKGROUND;
+import static application.Launcher.BACKGROUND_TERRAIN;
+
 public class PaintScene {
-    public final static List<Sphere> SPHERES = Sphere.SPHERES;
-    public final static Color BACKGROUND = Launcher.BACKGROUND;
-    public final static Color BACKGROUND_TERRAIN = Launcher.BACKGROUND_TERRAIN;
-    
     private Graphics graphics;
 
     private int windowWidth;
     private int windowHeight;
     private GameScene gameScene;
 
-    private int halfWindowWidth;
-    private int halfWindowHeight;
+    // private int halfWindowWidth;
+    // private int halfWindowHeight;
     private int width;
     private int height;
 
-    private Sphere target;
+    private Cell target;
 
     public PaintScene(int windowWidth, int windowHeight, GameScene gameScene){
         this.windowWidth = windowWidth;
@@ -37,16 +35,15 @@ public class PaintScene {
 
     public int getWindowWidth(){ return windowWidth; }
     public int getWindowHeight(){ return windowHeight; }
+    public Cell getTarget(){ return target; }
 
-    public void setTarget(Sphere target){
-        this.target = target;
-    }
-
+    public void setTarget(Cell target){ this.target = target; }
+    
     public void reloadSize(){
         width = gameScene.getWidth();
         height = gameScene.getHeight();
-        halfWindowWidth = windowWidth / 2;
-        halfWindowHeight = windowHeight / 2;
+        // halfWindowWidth = windowWidth / 2;
+        // halfWindowHeight = windowHeight / 2;
     }
 
     public void setGraphics(Graphics graphics){
@@ -56,8 +53,9 @@ public class PaintScene {
     public void drawScene(){
         if(graphics == null) return;
         clearScreen();
+        sortCells();
         drawTerrain();
-        drawSpheres();
+        drawCells();
     }
 
     public void clearScreen(){
@@ -65,21 +63,24 @@ public class PaintScene {
         fillRect(windowWidth, windowHeight);
     }
 
+    public void sortCells(){
+        Collections.sort(gameScene.getCells(), new DistanceCellComparator());
+    }
+
     public void drawTerrain(){
         setColor(BACKGROUND_TERRAIN);
         fillRect(width, height);
     }
-    public void drawSpheres(){
-        for(Sphere s : gameScene.getSpheres()) drawSphere(s);
+    public void drawCells(){
+        for(Cell s : gameScene.getCells()) drawCell(s);
     }
 
-    public void drawSphere(Sphere s){
-        setColor(s.getColor());
-        drawSphere(s.getPosition(), s.getSize());
+    public void drawCell(Cell s){
+        drawCell(s.getPosition(), s.getColor(), s.getSize());
     }
 
-    public void drawSphere(Vector2 p, double r){
-        fillOval((int)p.getX(), (int)p.getY(), (int)r);
+    public void drawCell(Vector2 p, Color color, double r){
+        fillOval(color, (int)p.getX(), (int)p.getY(), (int)r);
     }
 
     ////////// Graphics
@@ -96,9 +97,12 @@ public class PaintScene {
         graphics.fillRect(x, windowHeight - height, width, height);
     }
     
-    public void fillOval(int x, int y, int r){
+    public void fillOval(Color color, int x, int y, int r){
         int d = r * 2;
         y = windowHeight - y;
+        graphics.setColor(color);
         graphics.fillOval(x - r, y - r, d, d);
+        graphics.setColor(color.brighter());
+        graphics.drawOval(x - r, y - r, d, d);
     }
 }
