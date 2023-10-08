@@ -29,6 +29,7 @@ public class GameScene {
         this.width = width;
         this.height = height;
         Cell.gameScene = this;
+        Cell.cells = cells;
         init();
     }
 
@@ -54,10 +55,6 @@ public class GameScene {
     }
 
     public void init(){
-        newPlayerInstance();
-        newPlayerInstance();
-        newPlayerInstance();
-        newPlayerInstance();
         newPlayerInstance();
     }
 

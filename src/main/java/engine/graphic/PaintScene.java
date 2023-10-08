@@ -9,14 +9,15 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+import application.Launcher;
 import engine.game.Cell;
-import engine.game.DistanceCellComparator;
+import engine.game.VisionCellComparator;
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
 import engine.util.Colorf;
 
-import static application.Launcher.BACKGROUND;
-import static application.Launcher.BACKGROUND_TERRAIN;
+import static application.Main.BACKGROUND;
+import static application.Main.BACKGROUND_TERRAIN;
 import static application.Main.FONT_NAME;
 import static application.Main.FONT_TYPE;
 
@@ -25,6 +26,7 @@ public class PaintScene extends JPanel{
 
     private int windowWidth;
     private int windowHeight;
+    private Launcher launcher;
     private GameScene gameScene;
 
     private List<Cell> cells;
@@ -36,11 +38,11 @@ public class PaintScene extends JPanel{
 
     private static Cell target;
 
-    public PaintScene(int windowWidth, int windowHeight, GameScene gameScene){
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
+    public PaintScene(Launcher launcher, GameScene gameScene){
+        this.launcher = launcher;
         this.gameScene = gameScene;
         this.cells = gameScene.getCells();
+        reloadWindowSize();
         reloadSize();
     }
 
@@ -54,11 +56,16 @@ public class PaintScene extends JPanel{
         this.graphics = graphics;
     }
     
+    public void reloadWindowSize(){
+        windowWidth = launcher.getWindowWidth();
+        windowHeight = launcher.getWindowHeight();
+        // halfWindowWidth = windowWidth / 2;
+        // halfWindowHeight = windowHeight / 2;
+    }
+    
     public void reloadSize(){
         width = gameScene.getWidth();
         height = gameScene.getHeight();
-        // halfWindowWidth = windowWidth / 2;
-        // halfWindowHeight = windowHeight / 2;
     }
 
     @Override
@@ -77,17 +84,18 @@ public class PaintScene extends JPanel{
 
     public void clearScreen(){
         setColor(BACKGROUND);
-        fillRect(windowWidth, windowHeight);
+        fillRect(0, 0, windowWidth, windowHeight);
     }
 
     public void sortCells(){
-        Collections.sort(cells, new DistanceCellComparator());
+        Collections.sort(cells, new VisionCellComparator());
     }
 
     public void drawTerrain(){
         setColor(BACKGROUND_TERRAIN);
         fillRect(width, height);
     }
+    
     public void drawCells(){
         for(Cell s : cells) drawCell(s);
     }
@@ -95,7 +103,7 @@ public class PaintScene extends JPanel{
     public void drawCell(Cell s){
         Vector2 p = s.getPosition();
         Color c = s.getColor();
-        int x = (int)p.getX();
+        int x = getWindowWidth(p.getX());
         int y = getWindowHeight(p.getY());
         int r = (int)s.getSize();
         fillOval(c, x, y, r);
@@ -109,7 +117,7 @@ public class PaintScene extends JPanel{
     }
 
     public void fillRect(int width, int height){
-        fillRect(0, getWindowHeight(height), width, height);
+        fillRect(getWindowWidth(0), getWindowHeight(height), width, height);
     }
 
     public void fillRect(int x, int y, int width, int height){
@@ -138,7 +146,12 @@ public class PaintScene extends JPanel{
         graphics.drawString(plate, x - r / 2, y - r / 2);
     }
     
+    public int getWindowWidth(double x){
+        return (int)((windowWidth - width) / 2 + x);
+    }
+    
     public int getWindowHeight(double y){
-        return (int)(- y + height);
+        // (windowHeight - height) / 2 - y + height
+        return (int)((windowHeight - height) / 2 - y + height);
     }
 }

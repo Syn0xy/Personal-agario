@@ -7,7 +7,7 @@ public class Bot extends AdvancedCell{
 
     public Bot(Vector2 position){
         super(position);
-        this.ai = new BotAI(position);
+        this.ai = new BotAI(this, position);
     }
     
     public CellType getType(){
@@ -19,7 +19,6 @@ public class Bot extends AdvancedCell{
     }
 
     public void move(){
-        ai.update(this);
-        ai.move(this);
+        ai.update();
     }
 }

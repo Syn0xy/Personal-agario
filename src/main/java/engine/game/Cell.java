@@ -1,6 +1,7 @@
 package engine.game;
 
 import java.awt.Color;
+import java.util.List;
 
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
@@ -8,6 +9,7 @@ import engine.scene.GameScene;
 public abstract class Cell {
     public final static double RANGE = 0;
     public static GameScene gameScene;
+    public static List<Cell> cells;
 
     protected Vector2 position;
     protected Color color;

@@ -1,44 +1,46 @@
 package engine.game;
 
+import java.util.Collections;
+import java.util.List;
+
 import engine.geometric.Vector2;
 import engine.util.Mathf;
 
 public class BotAI {
+    private Bot bot;
     private Vector2 position;
     private Cell destination;
 
-    public BotAI(Vector2 position){
+    private TargetCellComparator comparator;
+
+    public BotAI(Bot bot, Vector2 position){
+        this.bot = bot;
         this.position = position;
+        this.destination = null;
+        this.comparator = new TargetCellComparator(bot);
     }
 
-    public Vector2 getPosition(){
-        return position;
+    public Bot getBot(){ return bot; }
+    public Vector2 getPosition(){ return position; }
+    public Cell getDestination(){ return destination; }
+
+    public void update(){
+        refreshDestination();
+        move();
     }
 
-    public Cell getDestination(){
-        return destination;
-    }
-
-    public void update(Bot bot){
-        Cell closest = null;
-        double dist = Double.MAX_VALUE;
-        for(Cell c : Bot.gameScene.getCells()){
-            if(bot == c) continue;
-            else if(closest == null) closest = c;
-            else{
-                double d = bot.distance(c);
-                if(d < dist && bot.superior(c)){
-                    dist = d;
-                    closest = c;
-                }
-            }
-        }
-        destination = closest;
+    public void refreshDestination(){
+        List<Cell> list = Bot.cells;
+        if(list.size() > 1){
+            Collections.sort(list, comparator);
+            destination = list.get(1);
+        }else destination = null;
     }
     
-    public void move(Bot bot){
+    public void move(){
         if(destination == null) return;
         Vector2 v = look();
+        if(v == null) return;
         v.multiply(bot.getSpeed());
         bot.addForce(v);
     }

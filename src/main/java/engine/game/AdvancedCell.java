@@ -48,7 +48,7 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public void collisions(){
-        for(Cell s : gameScene.getCells()){
+        for(Cell s : cells){
             if(this != s && this.collision(s) && this.superior(s)) eat(s);
         }
     }
