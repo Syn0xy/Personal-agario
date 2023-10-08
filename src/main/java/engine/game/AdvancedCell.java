@@ -4,8 +4,10 @@ import java.awt.Color;
 
 import engine.geometric.Vector2;
 import engine.util.Mathf;
-import engine.util.RandomColor;
+import engine.util.Colorf;
 import engine.util.Time;
+
+import static application.Main.SPEED;
 
 public abstract class AdvancedCell extends Cell{
     private final static int SIZE = 10;
@@ -20,7 +22,7 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public AdvancedCell(Vector2 position){
-        this(position, RandomColor.random());
+        this(position, Colorf.random());
     }
 
     public abstract CellType getType();
@@ -38,27 +40,45 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public void update(){
-        speed = 5 * Time.getDeltaTime();
+        refreshSpeed();
         rigidbody.update();
         move();
         bounce();
         collisions();
     }
 
+    public void collisions(){
+        for(Cell s : gameScene.getCells()){
+            if(this != s && this.collision(s) && this.superior(s)) eat(s);
+        }
+    }
+
+    public void eat(Cell s){
+        // Aire d'un cercle : pi * r * r
+        // Soit : pi * size * size
+        // Nouveau rayon : sqrt((airA + airB) / pi)
+        size = Mathf.hypotenuse(size, s.getSize());
+        s.delete();
+    }
+
+    public void refreshSpeed(){
+        speed = SPEED * Time.getDeltaTime();
+    }
+
     public abstract void move();
 
     public void bounce(){
-        if(bounce(position.getX())) position.plusX(Mathf.distance(position.getX() - size, 0));
-        if(bounce(position.getX(), gameScene.getWidth()))  position.plusX(- Mathf.distance(position.getX() + size, gameScene.getWidth()));
-        if(bounce(position.getY()))  position.plusY(Mathf.distance(position.getY() - size, 0));
-        if(bounce(position.getY(), gameScene.getHeight()))  position.plusY(- Mathf.distance(position.getY() + size, gameScene.getHeight()));
+        if(bounce(position.getX())) position.plusX(Mathf.distance(position.getX(), 0));
+        if(bounce(position.getX(), gameScene.getWidth()))  position.plusX(- Mathf.distance(position.getX(), gameScene.getWidth()));
+        if(bounce(position.getY()))  position.plusY(Mathf.distance(position.getY(), 0));
+        if(bounce(position.getY(), gameScene.getHeight()))  position.plusY(- Mathf.distance(position.getY(), gameScene.getHeight()));
     }
 
     private boolean bounce(double a){
-        return a - size < 0;
+        return a < 0;
     }
 
     private boolean bounce(double a, double max){
-        return a + size > max;
+        return a > max;
     }
 }

@@ -2,16 +2,14 @@ package application;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import engine.graphic.PaintScene;
 import engine.input.Input;
 import engine.scene.GameScene;
 
-public class Launcher extends JPanel{
+public class Launcher{
     public final static String TITLE = "Personal Agario";
     public final static Color BACKGROUND = Color.GRAY;
     public final static Color BACKGROUND_TERRAIN = Color.BLACK;
@@ -50,14 +48,13 @@ public class Launcher extends JPanel{
         frame.addKeyListener(Input.INSTANCE);
         // frame.addMouseListener(Input.INSTANCE);
 
-        setPreferredSize(frame.getPreferredSize());
+        paintScene.setPreferredSize(frame.getPreferredSize());
         
-        frame.add(this);
+        frame.add(paintScene);
         frame.setVisible(true);
     }
 
-    public void paint(Graphics g){
-        paintScene.setGraphics(g);
-        paintScene.drawScene();
+    public void repaint(){
+        paintScene.repaint();
     }
 }

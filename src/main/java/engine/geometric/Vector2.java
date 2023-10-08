@@ -36,6 +36,12 @@ public class Vector2 {
     public void multiplyX(double x){ this.x *= x; }
     public void multiplyY(double y){ this.y *= y; }
 
+    public void divide(Vector2 v){ divide(v.getX(), v.getY()); }
+    public void divide(double a){ divide(a, a); }
+    public void divide(double x, double y){ divideX(x); divideY(y); }
+    public void divideX(double x){ this.x /= x; }
+    public void divideY(double y){ this.y /= y; }
+    
     public Vector2 copy(){ return new Vector2(x, y); }
 
     public double distance(Vector2 v){

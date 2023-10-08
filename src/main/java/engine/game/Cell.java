@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
-import engine.util.Mathf;
 
 public abstract class Cell {
     public final static double RANGE = 0;
@@ -31,18 +30,8 @@ public abstract class Cell {
         return size > s.getSize();
     }
 
-    public void eat(Cell s){
-        // Aire d'un cercle : pi * r * r
-        // Soit : pi * size * size
-        // Nouveau rayon : sqrt((airA + airB) / pi)
-        size = Mathf.hypotenuse(size, s.getSize());
-        s.delete();
-    }
-
-    public void collisions(){
-        for(Cell s : gameScene.getCells()){
-            if(this != s && this.collision(s) && this.superior(s)) eat(s);
-        }
+    public void addSize(double size){
+        this.size += size;
     }
 
     public void delete(){
