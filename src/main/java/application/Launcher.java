@@ -1,7 +1,6 @@
 package application;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
@@ -11,15 +10,11 @@ import engine.graphic.PaintScene;
 import engine.input.Input;
 import engine.scene.GameScene;
 
+import static application.Main.SCREEN_WIDTH;
+import static application.Main.SCREEN_HEIGHT;
+
 public class Launcher implements ComponentListener{
     public final static String TITLE = "Personal Agario";
-
-    public final static Dimension SCREEN_SIZE = Main.SCREEN_SIZE;
-    public final static int SCREEN_WIDTH = Main.SCREEN_WIDTH;
-    public final static int SCREEN_HEIGHT = Main.SCREEN_HEIGHT;
-    public final static Dimension WINDOW_SIZE = Main.WINDOW_SIZE;
-    public final static int WINDOW_WIDTH = Main.WINDOW_WIDTH;
-    public final static int WINDOW_HEIGHT = Main.WINDOW_HEIGHT;
     
     private int windowWidth;
     private int windowHeight;
@@ -48,13 +43,17 @@ public class Launcher implements ComponentListener{
         JFrame.setDefaultLookAndFeelDecorated(false);
         JFrame frame = new JFrame(TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(windowWidth, windowHeight);
-        frame.setLocation((SCREEN_WIDTH - windowWidth) / 2, (SCREEN_HEIGHT - windowHeight) / 2);        
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // frame.setSize(windowWidth, windowHeight);
+        // frame.setLocation((SCREEN_WIDTH - windowWidth) / 2, (SCREEN_HEIGHT - windowHeight) / 2);
         frame.addComponentListener(this);
         frame.addKeyListener(Input.INSTANCE);
         // frame.addMouseListener(Input.INSTANCE);
+        
+        // paintScene.setPreferredSize(frame.getPreferredSize());
 
-        paintScene.setPreferredSize(frame.getPreferredSize());
+        System.out.println("Screen : " + SCREEN_WIDTH + " / " + SCREEN_HEIGHT);
+        System.out.println("Window : " + windowWidth + " / " + windowHeight);
         
         frame.add(paintScene);
         frame.setVisible(true);

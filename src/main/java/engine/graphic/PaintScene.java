@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 
 import application.Launcher;
 import engine.game.Cell;
+import engine.game.CellType;
 import engine.game.VisionCellComparator;
 import engine.geometric.Vector2;
 import engine.scene.GameScene;
@@ -80,11 +81,23 @@ public class PaintScene extends JPanel{
         sortCells();
         drawTerrain();
         drawCells();
+        drawDebugs();
     }
 
     public void clearScreen(){
         setColor(BACKGROUND);
         fillRect(0, 0, windowWidth, windowHeight);
+    }
+
+    public void drawDebugs(){
+        String s1 = "Nb de cells : " + gameScene.getCells().size();
+        String s2 = "Nb de foods : " + gameScene.getFoods().size();
+        String s3 = "Nb de cells avancées : " + (gameScene.getCells().size() - gameScene.getFoods().size());
+        graphics.setColor(Colorf.inverse(BACKGROUND));
+        graphics.setFont(new Font(FONT_NAME, FONT_TYPE, 12));
+        graphics.drawString(s1, 30, 30);
+        graphics.drawString(s2, 30, 60);
+        graphics.drawString(s3, 30, 90);
     }
 
     public void sortCells(){
@@ -107,7 +120,7 @@ public class PaintScene extends JPanel{
         int y = getWindowHeight(p.getY());
         int r = (int)s.getSize();
         fillOval(c, x, y, r);
-        drawPlate(Colorf.inverse(c), x, y, r);
+        if(s.getType() != CellType.FOOD) drawPlate(Colorf.inverse(c), x, y, r);
     }
 
     ////////// Graphics
@@ -147,11 +160,17 @@ public class PaintScene extends JPanel{
     }
     
     public int getWindowWidth(double x){
+        if(target == null) return (int)((windowWidth - width) / 2 + x);
+        // Screen : 200 ; 200
+        // Target : 50 ; 50
+        
+        x = ;
         return (int)((windowWidth - width) / 2 + x);
     }
     
     public int getWindowHeight(double y){
         // (windowHeight - height) / 2 - y + height
+        if(target == null) return (int)((windowHeight - height) / 2 - y + height);
         return (int)((windowHeight - height) / 2 - y + height);
     }
 }

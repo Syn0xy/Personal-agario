@@ -9,7 +9,6 @@ import engine.game.Cell;
 import engine.game.Food;
 import engine.game.Player;
 import engine.geometric.Vector2;
-import engine.graphic.PaintScene;
 import engine.input.Input;
 import engine.input.KeyCode;
 
@@ -19,6 +18,8 @@ import static application.Main.FOOD_COUNT;
 public class GameScene {
     private List<Cell> cells;
     private List<Food> foods;
+
+    private Cell player;
     
     private int width;
     private int height;
@@ -30,10 +31,11 @@ public class GameScene {
         this.height = height;
         Cell.gameScene = this;
         Cell.cells = cells;
-        init();
     }
 
     public List<Cell> getCells(){ return cells; }
+    public List<Food> getFoods(){ return foods; }
+    public Cell getPlayer(){ return player; }
     public int getWidth(){ return width; }
     public int getHeight(){ return height; }
 
@@ -52,10 +54,7 @@ public class GameScene {
             s.update();
         }
         if(Input.getKeyDown(KeyCode.A)) spawnBot();
-    }
-
-    public void init(){
-        newPlayerInstance();
+        if(Input.getKeyDown(KeyCode.Z)) newPlayerInstance();
     }
 
     public void spawnBot(){
@@ -67,9 +66,8 @@ public class GameScene {
     }
 
     public void newPlayerInstance(){
-        Player p = new Player(new Vector2(width / 2, height / 2), Color.RED);
-        add(p);
-        PaintScene.setTarget(p);
+        player = new Player(new Vector2(width / 2, height / 2), Color.RED);
+        add(player);
     }
 
     public void newBotInstance(){
