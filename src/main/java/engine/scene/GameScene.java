@@ -9,6 +9,7 @@ import engine.game.Cell;
 import engine.game.Food;
 import engine.game.Player;
 import engine.geometric.Vector2;
+import engine.graphic.PaintScene;
 import engine.input.Input;
 import engine.input.KeyCode;
 
@@ -46,6 +47,7 @@ public class GameScene {
     public void delete(Cell cell){
         cells.remove(cell);
         if(foods.contains(cell)) foods.remove(cell);
+        if(player == cell) player = null;
     }
 
     public void update(){

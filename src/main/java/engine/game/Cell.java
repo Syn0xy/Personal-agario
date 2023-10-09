@@ -24,9 +24,13 @@ public abstract class Cell {
     public Vector2 getPosition(){ return position; }
     public Color getColor(){ return color; }
     public double getSize(){ return size; }
-
+    
     public abstract CellType getType();
     public abstract void update();
+
+    public boolean isFood(){
+        return getType() == CellType.FOOD;
+    }
 
     public boolean superior(Cell s){
         return size > s.getSize();

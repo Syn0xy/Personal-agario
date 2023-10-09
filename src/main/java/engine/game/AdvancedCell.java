@@ -10,7 +10,7 @@ import engine.util.Time;
 import static application.Main.SPEED;
 
 public abstract class AdvancedCell extends Cell{
-    private final static int SIZE = 10;
+    private final static int SIZE = 2;
 
     protected Rigidbody rigidbody;
     protected double speed;
@@ -49,11 +49,15 @@ public abstract class AdvancedCell extends Cell{
 
     public void collisions(){
         for(Cell s : cells){
-            if(this != s && this.collision(s) && this.superior(s)) eat(s);
+            if(this == s) continue;
+            if(!this.collision(s)) continue;
+            if(!this.superior(s) && !s.isFood()) continue;
+            eat(s);
         }
     }
 
     public void eat(Cell s){
+
         // Aire d'un cercle : pi * r * r
         // Soit : pi * size * size
         // Nouveau rayon : sqrt((airA + airB) / pi)

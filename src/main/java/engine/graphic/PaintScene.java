@@ -37,8 +37,6 @@ public class PaintScene extends JPanel{
     private int width;
     private int height;
 
-    private static Cell target;
-
     public PaintScene(Launcher launcher, GameScene gameScene){
         this.launcher = launcher;
         this.gameScene = gameScene;
@@ -49,9 +47,7 @@ public class PaintScene extends JPanel{
 
     public int getWindowWidth(){ return windowWidth; }
     public int getWindowHeight(){ return windowHeight; }
-    public Cell getTarget(){ return target; }
-
-    public static void setTarget(Cell target){ PaintScene.target = target; }
+    public Cell getTarget(){ return gameScene.getPlayer(); }
 
     public void setGraphics(Graphics graphics){
         this.graphics = graphics;
@@ -160,17 +156,18 @@ public class PaintScene extends JPanel{
     }
     
     public int getWindowWidth(double x){
-        if(target == null) return (int)((windowWidth - width) / 2 + x);
-        // Screen : 200 ; 200
-        // Target : 50 ; 50
-        
-        x = ;
-        return (int)((windowWidth - width) / 2 + x);
+        Cell c = getTarget();
+        if(c == null) return (int)((windowWidth - width) / 2 + x);
+        // Screen : 150 ; 150
+        // Size :   100 ; 100
+        // Target : 25 ; 25
+        return (int)(windowWidth / 2 + x - c.getPosition().getX());
     }
     
     public int getWindowHeight(double y){
+        Cell c = getTarget();
         // (windowHeight - height) / 2 - y + height
-        if(target == null) return (int)((windowHeight - height) / 2 - y + height);
-        return (int)((windowHeight - height) / 2 - y + height);
+        if(c == null) return (int)((windowHeight - height) / 2 - y + height);
+        return (int)(windowHeight / 2 - y + c.getPosition().getY());
     }
 }
