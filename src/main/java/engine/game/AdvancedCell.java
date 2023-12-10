@@ -7,9 +7,9 @@ import engine.util.Mathf;
 import engine.util.Colorf;
 import engine.util.Time;
 
-import static application.Main.SPEED;
+import static engine.scene.GameScene.CELL_SPEED;
 
-public abstract class AdvancedCell extends Cell{
+public abstract class AdvancedCell extends Cell {
     private final static int SIZE = 2;
 
     protected Rigidbody rigidbody;
@@ -26,10 +26,6 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public abstract CellType getType();
-    
-    public Rigidbody getRigidbody(){
-        return rigidbody;
-    }
     
     public double getSpeed(){
         return speed;
@@ -57,7 +53,6 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public void eat(Cell s){
-
         // Aire d'un cercle : pi * r * r
         // Soit : pi * size * size
         // Nouveau rayon : sqrt((airA + airB) / pi)
@@ -66,7 +61,7 @@ public abstract class AdvancedCell extends Cell{
     }
 
     public void refreshSpeed(){
-        speed = SPEED * Time.getDeltaTime();
+        speed = CELL_SPEED * Time.getDeltaTime();
     }
 
     public abstract void move();

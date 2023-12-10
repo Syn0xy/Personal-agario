@@ -85,12 +85,6 @@ public class Input implements KeyListener, MouseListener{
     }
 
     public static void update(){
-        refreshKeyCodes();
-    }
-
-    private static void refreshKeyCodes(){
-        for(InputKeyCode input : INPUTS_KEYCODE){
-            input.update();
-        }
+        INPUTS_KEYCODE.stream().forEach((i) -> { i.update(); });
     }
 }

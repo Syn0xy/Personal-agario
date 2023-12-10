@@ -1,22 +1,27 @@
 package engine.scene;
 
 import java.awt.Color;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import javax.swing.SwingUtilities;
 
 import engine.game.Bot;
 import engine.game.Cell;
 import engine.game.Food;
 import engine.game.Player;
 import engine.geometric.Vector2;
-import engine.graphic.PaintScene;
 import engine.input.Input;
 import engine.input.KeyCode;
+import engine.util.Time;
+import view.util.Subject;
 
-import static application.Main.BOT_COUNT;
-import static application.Main.FOOD_COUNT;
+public class GameScene extends Subject {
+    public final static int CELL_SPEED = 5;
+    public final static int BOT_COUNT = 20;
+    public final static int FOOD_COUNT = 1000;
 
-public class GameScene {
     private List<Cell> cells;
     private List<Food> foods;
 
@@ -30,8 +35,9 @@ public class GameScene {
         this.foods = new CopyOnWriteArrayList<>();
         this.width = width;
         this.height = height;
-        Cell.gameScene = this;
         Cell.cells = cells;
+        Cell.gameScene = this;
+        thread();
     }
 
     public List<Cell> getCells(){ return cells; }
@@ -39,6 +45,37 @@ public class GameScene {
     public Cell getPlayer(){ return player; }
     public int getWidth(){ return width; }
     public int getHeight(){ return height; }
+    
+    public void thread(){
+        SwingUtilities.invokeLater(() -> {
+            Thread engineThread = new Thread("Engine"){
+                public void run(){
+                    while(isAlive() && !isInterrupted()){
+                        try{
+                            Time.update();
+                            Input.update();
+                            update();
+                        }catch(NullPointerException | ConcurrentModificationException e){
+                            System.err.println("Error : " + e.getMessage());
+                        }
+                    }
+                }
+            };
+            Thread graphicsThread = new Thread("Graphics"){
+                public void run(){
+                    while(isAlive() && !isInterrupted()){
+                        try{
+                            notifyObservers();
+                        }catch(NullPointerException | ConcurrentModificationException e){
+                            System.err.println("Error : " + e.getMessage());
+                        }
+                    }
+                }
+            };
+            engineThread.start();
+            graphicsThread.start();
+        });
+    }
 
     public void add(Cell sphere){
         cells.add(sphere);
@@ -52,9 +89,7 @@ public class GameScene {
 
     public void update(){
         refreshFood();
-        for(Cell s : cells){
-            s.update();
-        }
+        cells.stream().forEach((c) -> { c.update(); });
         if(Input.getKeyDown(KeyCode.A)) spawnBot();
         if(Input.getKeyDown(KeyCode.Z)) newPlayerInstance();
     }
@@ -73,6 +108,7 @@ public class GameScene {
     }
 
     public void newBotInstance(){
+        System.out.println("add bot");
         add(new Bot(Vector2.randomRange(width, height)));
     }
 
