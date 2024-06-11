@@ -1,48 +1,59 @@
 package view;
 
-import java.awt.Point;
+import java.awt.Component;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseWheelEvent;
 
-import engine.input.Input;
-import engine.scene.GameScene;
-import view.util.Observer;
-import view.util.Subject;
+import utils.Subject;
+import utils.Updatable;
+import utils.input.Input;
 
-public class GameView extends View implements Observer {
-    private static final int WIDTH = (int)(SCREEN_WIDTH * (2.0/3.0));
-    private static final int HEIGHT = (int)(SCREEN_HEIGHT * (2.0/3.0));
-    private static final String TITLE = "Personal - Agario";
+public abstract class GameView extends View implements Updatable {
 
-    private GameScene gameScene;
+    private static final int WIDTH = (int)(SCREEN_WIDTH * (2.0 / 3.0));
 
-    public GameView(GameScene gameScene){
-        this.gameScene = gameScene;
-        gameScene.attach(this);
-        init(WIDTH, HEIGHT);
+    private static final int HEIGHT = (int)(SCREEN_HEIGHT * (2.0 / 3.0));
+    
+    private static final String TITLE = "Personal Agario";
+
+    protected Canvas canvas;
+    
+    public GameView(Subject subject, Canvas canvas) {
+        this.canvas = canvas;
+        subject.attach(this);
+        super.init(WIDTH, HEIGHT);
     }
 
     @Override
-    public String title() {
-        return TITLE + " (" + gameScene.getWidth() + "x" + gameScene.getHeight() + ")";
+    public String getTitle() {
+        return TITLE;
     }
 
     @Override
-    protected void view() {
-        add(new GameCanvas(gameScene));
-        addKeyListener(Input.INSTANCE);
+    public Component getContent() {
+        return this.canvas;
+    }
+    
+    @Override
+    public KeyAdapter getKeyAdapter() {
+        return Input.getInstance();
     }
 
     @Override
-    protected Point position() {
-        return center();
+    public MouseAdapter getMouseAdapter() {
+        return new MouseAdapter() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                canvas.plusZoom(e.getWheelRotation());
+            }
+        };
     }
 
     @Override
-    public void update(Subject subj) {
+    public void update() {
         repaint();
+        setTitle(TITLE);
     }
-
-    @Override
-    public void update(Subject subj, Object data) {
-        repaint();
-    }    
+    
 }

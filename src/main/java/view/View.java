@@ -1,29 +1,50 @@
 package view;
 
-import javax.swing.JFrame;
+import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.KeyAdapter;
+import java.awt.event.MouseAdapter;
+
+import javax.swing.JFrame;
 
 public abstract class View extends JFrame {
-    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    public static final int SCREEN_WIDTH = (int)SCREEN_SIZE.getWidth();
-    public static final int SCREEN_HEIGHT = (int)SCREEN_SIZE.getHeight();
 
-    protected void init(int width, int height){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    protected static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
+
+    protected static final int SCREEN_WIDTH = SCREEN_SIZE.width;
+
+    protected static final int SCREEN_HEIGHT = SCREEN_SIZE.height;
+
+    protected void init(int width, int height) {
+        KeyAdapter keyAdapter = getKeyAdapter();
+        MouseAdapter mouseAdapter = getMouseAdapter();
+        
+        addKeyListener(keyAdapter);
+        addMouseListener(mouseAdapter);
+        addMouseMotionListener(mouseAdapter);
+        addMouseWheelListener(mouseAdapter);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setSize(width, height);
-        setLocation(position());
-        setTitle(title());
-        view();
+        setLocation(
+            (SCREEN_WIDTH - width) / 2,
+            (SCREEN_HEIGHT - height) / 2
+        );
+        setTitle(getTitle());
+        add(getContent());
         setVisible(true);
     }
+    
+    public abstract String getTitle();
 
-    public abstract String title();
-    protected abstract void view();
-    protected abstract Point position();
+    public abstract Component getContent();
 
-    protected Point center(){
-        return new Point((SCREEN_WIDTH - getWidth()) / 2, (SCREEN_HEIGHT - getHeight()) / 2);
+    public KeyAdapter getKeyAdapter() {
+        return null;
     }
+
+    public MouseAdapter getMouseAdapter() {
+        return null;
+    }
+
 }
